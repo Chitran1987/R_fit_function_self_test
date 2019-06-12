@@ -24,14 +24,20 @@ f<-function(v){
   return(y)
 }
 MSE_f<-function(f){
-  m<-sum((f(v)-y1)^2)/10^6
+  m<-(sum((f(v)-y1)^2))/10^6
   return(m)
 }
 q<-vector(mode='numeric', length=4)
 t<-0.02
 va<-0
 q[1]<-MSE_f(f(v))
+
+####The optimization loop#######################################################
 for (i in 1:20000) {
+  if(i==20000){
+    print('Solution did not converge')
+    break
+  }
   if(i==1) {
     v[1]<-v[1]+t
     q[2]<-MSE_f(f(v))
@@ -101,5 +107,11 @@ for (i in 1:20000) {
 
 
 #####################################code_end#########################
-
-
+#####################################code_test_begins#################
+tt<-seq(-3000,3000, by=2)
+M<-vector(mode='numeric', length = length(tt))
+for(i in 1:length(tt)){
+  v[1]<-tt[i]
+  M[i]<-MSE_f(f(v))
+}
+plot(tt,M, type = "l")
