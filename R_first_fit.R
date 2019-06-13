@@ -13,24 +13,25 @@ points(x,y1, col='blue')
 ############################################
 #Start writing the minimization algorithm
 v<-vector(mode='numeric', length = 6)
-v[1]<-3 
-v[2]<-5 
-v[3]<-6
-v[4]<-2
-v[5]<-9
-v[6]<-3
+v[1]<- 3 
+v[2]<-6 
+v[3]<-4
+v[4]<-3
+v[5]<-7.3
+v[6]<- 1.7
 f<-function(v){
   y <-v[1]*exp(-v[4]*x)+v[2]*exp(-v[5]*x)+v[3]*exp(-v[6]*x)
   return(y)
 }
 MSE_f<-function(f){
-  m<-(sum((f(v)-y1)^2))/10^6
+  m<-(sum((f(v)-y1)^2))
   return(m)
 }
 q<-vector(mode='numeric', length=4)
 t<-0.02
 va<-0
 q[1]<-MSE_f(f(v))
+l<-1
 
 ####The optimization loop#######################################################
 for (i in 1:20000) {
@@ -75,6 +76,7 @@ for (i in 1:20000) {
       q[2]<-MSE_f(f(v))
       v[1]<-v[1]+t
       q[3]<-MSE_f(f(v))
+      l<- q[2]-q[3]
       if(q[3]>q[2]){
         va<-0
         print('Local minima reached')
@@ -90,6 +92,7 @@ for (i in 1:20000) {
       q[2]<-MSE_f(f(v))
       v[1]<-v[1]-t
       q[3]<-MSE_f(f(v))
+      l<- q[2]-q[3]
       if(q[3]>q[2]){
         va<-0
         print('Local minima reached')
@@ -115,3 +118,4 @@ for(i in 1:length(tt)){
   M[i]<-MSE_f(f(v))
 }
 plot(tt,M, type = "l")
+lines(x, f(v))
