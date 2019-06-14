@@ -2,12 +2,12 @@ rm(list=ls())
 library(DataAnalyze)
 
 #generating the data-set######################
-x<-seq(from = -1000, to=1000, by=0.2)
-rm(list = 'x')
-x<-seq(-1,-0.5, 0.002)
-class(x)
-ran<-40*runif(min=-10,max=10, length(x))
-y<-3*exp(-(((x-4)/2)^2))+6*exp(-(((x-3)/1)^2))
+x<-seq(from = -10, to=10, by=0.05)
+#rm(list = 'x')
+#x<-seq(-1,-0.5, 0.002)
+#class(x)
+ran<-0.1*runif(min=-1,max=1, length(x))
+y<-3*exp(-1*(((x-4)/2)^2))+6*exp(-1*(((x-3)/1)^2))
 y1<-y+ran
 plot(x,y, type = 'l', col='red' )
 points(x,y1, col='blue')
@@ -18,17 +18,17 @@ points(x,y1, col='blue')
 
 #Here is the vector to be minimized#######################
 v<-vector(mode='numeric', length = 6)
-v[1]<-12 
-v[2]<-9 
-v[3]<-2
-v[4]<-6
-v[5]<-7
-v[6]<- 5
+v[1]<-6
+v[2]<-3 
+v[3]<-1
+v[4]<-3
+v[5]<-4.5
+v[6]<- 2
 ##########################################################
 
 #The function to be fit##################################
 f<-function(v){
-  y <-v[1]*exp(-v[4]*x)+v[2]*exp(-v[5]*x)+v[3]*exp(-v[6]*x)
+  y <-v[1]*exp(-1*(((x-v[2])/v[3])^2))+v[4]*exp(-1*(((x-v[5])/v[6])^2))
   return(y)
 }
 ########################################################
@@ -50,19 +50,32 @@ l<-function(k){
   }
   return(l)
 }
+######################################################
+
+d<-'TRUE'     #bit set to false when solution does not converge even once
+
 
 for(k in 1:10){
+  if(d=='FALSE'){
+    print('solution did not converge')
+    break
+  }
 q<-vector(mode='numeric', length=4)
 t<-0.02
 va<-0
 q[1]<-MSE_f(f(v))
 #l<-1
-it<-2000000
+it<-20000
 ####The optimization loop#######################################################
 for(j in 1:length(v)){
+  if(d=='FALSE'){
+    print('solution did not converge')
+    break
+  }
 for (i in 1:it) {
   if(i==it){
     print('Solution did not converge')
+    d<-'FALSE'
     break
   }
   if(i==1) {
