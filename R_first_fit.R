@@ -9,8 +9,8 @@ x<-seq(from = -10, to=10, by=0.05)
 ran<-0.1*runif(min=-1,max=1, length(x))
 y<-3*exp(-1*(((x-4)/2)^2))+6*exp(-1*(((x-3)/1)^2))
 y1<-y+ran
-plot(x,y, type = 'l', col='red' )
-points(x,y1, col='blue')
+#plot(x,y, type = 'l', col='red' )
+plot(x,y1, col='blue')
 #############################################
 
 ############################################
@@ -18,12 +18,12 @@ points(x,y1, col='blue')
 
 #Here is the vector to be minimized#######################
 v<-vector(mode='numeric', length = 6)
-v[1]<-6
-v[2]<-3 
-v[3]<-1
+v[1]<-8
+v[2]<-4 
+v[3]<-2
 v[4]<-3
-v[5]<-4.5
-v[6]<- 2
+v[5]<-6
+v[6]<- 3
 ##########################################################
 
 #The function to be fit##################################
@@ -43,7 +43,8 @@ MSE_f<-function(f){
 #Define the proportionality function##################
 l<-function(k){
   if(k==1){
-    l<-(q[2]-q[3])/(length(x))
+   # l<-(q[2]-q[3])/(length(x))
+    l<-1
   }
   else{
     l<-1
@@ -52,7 +53,7 @@ l<-function(k){
 }
 ######################################################
 
-d<-'TRUE'     #bit set to false when solution does not converge even once
+d<-'TRUE'     #bit set to false whenever solution does not converge within the given number of iterations
 
 
 for(k in 1:10){
@@ -151,6 +152,10 @@ for (i in 1:it) {
   
 }
 }
+}
+if(va==0 & d=='TRUE'){
+  lines(x,v[1]*exp(-1*(((x-v[2])/v[3])^2)), col='green')
+  lines(x,v[4]*exp(-1*(((x-v[5])/v[6])^2)), col='cyan')
 }
 #####################################code_end#########################
 
