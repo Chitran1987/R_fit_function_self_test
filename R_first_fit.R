@@ -157,11 +157,4 @@ for (i in 1:it) {
 
 
 #####################################code_test_begins#################
-tt<-seq(-3000,3000, by=2)
-M<-vector(mode='numeric', length = length(tt))
-for(i in 1:length(tt)){
-  v[1]<-tt[i]
-  M[i]<-MSE_f(f(v))
-}
-plot(tt,M, type = "l")
-lines(x, f(v))
+
