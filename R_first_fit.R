@@ -1,11 +1,13 @@
 rm(list=ls())
 library(DataAnalyze)
+
+#generating the data-set######################
 x<-seq(from = -1000, to=1000, by=0.2)
 rm(list = 'x')
 x<-seq(-1,-0.5, 0.002)
 class(x)
 ran<-40*runif(min=-10,max=10, length(x))
-y<-2*exp(-3*x)+6*exp(-7.3*x)+4*exp(-5*x)
+y<-3*exp(-(((x-4)/2)^2))+6*exp(-(((x-3)/1)^2))
 y1<-y+ran
 plot(x,y, type = 'l', col='red' )
 points(x,y1, col='blue')
@@ -16,12 +18,12 @@ points(x,y1, col='blue')
 
 #Here is the vector to be minimized#######################
 v<-vector(mode='numeric', length = 6)
-v[1]<-2 
-v[2]<-6 
-v[3]<-4
-v[4]<-3
-v[5]<-7.5
-v[6]<- 4
+v[1]<-12 
+v[2]<-9 
+v[3]<-2
+v[4]<-6
+v[5]<-7
+v[6]<- 5
 ##########################################################
 
 #The function to be fit##################################
@@ -38,12 +40,23 @@ MSE_f<-function(f){
 }
 ######################################################
 
+#Define the proportionality function##################
+l<-function(k){
+  if(k==1){
+    l<-(q[2]-q[3])/(length(x))
+  }
+  else{
+    l<-1
+  }
+  return(l)
+}
+
 for(k in 1:10){
 q<-vector(mode='numeric', length=4)
 t<-0.02
 va<-0
 q[1]<-MSE_f(f(v))
-l<-1
+#l<-1
 it<-2000000
 ####The optimization loop#######################################################
 for(j in 1:length(v)){
@@ -89,9 +102,8 @@ for (i in 1:it) {
     }
     else if(va==1){
       q[2]<-MSE_f(f(v))
-      v[j]<-v[j]+t
+      v[j]<-v[j]+l(k)*t
       q[3]<-MSE_f(f(v))
-      l<- q[2]-q[3]
       if(q[3]>q[2]){
         va<-0
         print('Local minima reached')
@@ -107,9 +119,8 @@ for (i in 1:it) {
     }
     else{
       q[2]<-MSE_f(f(v))
-      v[j]<-v[j]-t
+      v[j]<-v[j]-l(k)*t
       q[3]<-MSE_f(f(v))
-      l<- q[2]-q[3]
       if(q[3]>q[2]){
         va<-0
         print('Local minima reached')
