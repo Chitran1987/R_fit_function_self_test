@@ -35,8 +35,11 @@ f<-function(v){
 
 #The sum of error squared##############################
 MSE_f<-function(f){
-  m<-(sum((f(v)-y1)^2))
-  return(m)
+  try(if(class(f)!='function'){stop('argument to MSE_f(f) has to be a function')}
+      else{
+        m<-(sum((f(v)-y1)^2))
+        return(m)  
+      })
 }
 ######################################################
 
@@ -160,3 +163,60 @@ if(va==0 & d=='TRUE'){
 #####################################code_end#########################
 
 
+
+
+
+
+
+#####Write a function which takes a function as an argument###########
+rm(list=ls())
+add_sin<-function(f,k,x){
+  try( if(class(f)!='function'){
+    stop('f has to be a function')
+  }
+  else if(class(k)!='numeric' & class(k)!='integer'){
+  stop('k cannot be evaluated')  
+  }
+  else if(class(x)!='integer' & class(x)!='numeric'){
+   stop('x has to be either a numeric input or an integer')
+  }
+  else{
+    y<-f(x)+1000*sin(k*x)
+  return(y)
+  }
+  )
+  }
+
+g<-function(x){
+  y<-x^2+x+1
+  return(y)
+}
+v<- -100:100
+g1<-g(v)
+k<-0.1
+y<-add_sin(g1,0.1,v)
+plot(v,y)
+
+
+
+
+
+
+
+
+
+
+su<-function(x,y){
+  try(if((class(x)!='integer'& class(x)!='numeric')|(class(y)!='integer' & class(y)!='numeric'))stop('input error'))
+s<-x+y
+return(s)
+  }
+su<-function(x,y){
+  try(if(x==3 | y==3){
+    stop("can't accept 3")}
+    else{s<-x+y
+           return(s)})
+
+}
+su(2,5)
+su(2,3)
