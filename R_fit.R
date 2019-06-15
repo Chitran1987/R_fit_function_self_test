@@ -140,18 +140,22 @@ fit_2D<-function(func, dat, it, op_v){
 
 ###########generate random dataset######################################
 rm(list = ls())
-x<-seq(-20,20, by=0.1)
-y<-x^2+x+1+10*runif(length(x))
+x<-seq(-3,3, by=0.01)
+y<- 3*exp(-1*(((x-0.5)/(1.5))^2))+1.5*exp(-1*(((x+0.27)/(2))^2))+2*exp(-1*(((x-1.75)/(1))^2))
 plot(x,y)
 dat<-matrix( c(y,x), nrow = 2, ncol = length(x), byrow = 'TRUE')
 #v<-vector(mode='numeric',length = 3)
 func<-function(v){
-  y<-v[1]*x*x+v[2]*x+v[3]
+  y<-v[1]*exp(-1*(((x-v[2])/(v[3]))^2))+v[4]*exp(-1*(((x-v[5])/(v[6]))^2))+v[7]*exp(-1*(((x-v[8])/(v[9]))^2))
   return(y)
 }
 i<-20000
-lines(x, f(c(1,1,3)), col='red')
-op_v<-c(1,2,3)
+lines(x, func(c(4,1,1,2,2,0.66,2,-0.5,2)), col='red')
+op_v<-fit_2D(func, dat, i, op_v)
 fit_2D(func, dat, i, op_v)
 class(func)
 fit_2D(func(v), dat, i, v)
+clp<-function(){
+  dev.off()
+  return(NULL)
+}
