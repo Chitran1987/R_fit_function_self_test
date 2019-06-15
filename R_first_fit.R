@@ -35,11 +35,11 @@ f<-function(v){
 
 #The sum of error squared##############################
 MSE_f<-function(f){
-  try(if(class(f)!='function'){stop('argument to MSE_f(f) has to be a function')}
-      else{
+  #try(if(class(f)!='function'){stop('argument to MSE_f(f) has to be a function')}
+      #else{
         m<-(sum((f(v)-y1)^2))
         return(m)  
-      })
+      #})
 }
 ######################################################
 
@@ -220,3 +220,6 @@ su<-function(x,y){
 }
 su(2,5)
 su(2,3)
+a<-1
+b<-2
+su(a,b)

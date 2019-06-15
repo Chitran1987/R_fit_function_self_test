@@ -1,12 +1,17 @@
+rm(list=ls())
+############Function Start#################################################
 fit_2D<-function(func, dat, it, op_v){
+  
+  plot(dat[2,], dat[1,])
+  
   
   #The sum of error squared##############################
   MSE_f<-function(func){
-    try(if(class(func)!='function'){stop('argument to MSE_f(f) has to be a function')}
-        else{
+    #try(if(class(func)!='function'){stop('argument to MSE_f(f) has to be a function')}
+      #  else{
           m<-(sum((func(op_v)-dat[1,])^2))
           return(m)  
-        })
+       # })
   }
   ######################################################
   
@@ -53,8 +58,8 @@ fit_2D<-function(func, dat, it, op_v){
           op_v[j]<-op_v[j]+t
           q[2]<-MSE_f(func(op_v))
           op_v[j]<-op_v[j]-2*t
-          q[3]<-MSE_f(fUNC(OP_v))
-          OP_v[j]<-OP_v[j]+2*t
+          q[3]<-MSE_f(func(op_v))
+          op_v[j]<-op_v[j]+2*t
           if(q[1]>q[2] & q[1]>q[3]){
             if(abs(q[1]-q[3])>abs(q[1]-q[2])){
               va<- -1
@@ -80,7 +85,7 @@ fit_2D<-function(func, dat, it, op_v){
             print('Local minima reached')
             yres<-func(op_v)
             if(j==length(op_v) & k==5){
-              lines(x,yres)
+              lines(x,yres, col='red')
             }
             break
           }
@@ -93,7 +98,7 @@ fit_2D<-function(func, dat, it, op_v){
               print('Local minima reached')
               yres<-func(op_v)
               if(j==length(op_v) & k==5){
-                lines(x,yres)
+                lines(x,yres, col='red')
               }
               break
             }
@@ -110,7 +115,7 @@ fit_2D<-function(func, dat, it, op_v){
               print('Local minima reached')
               yres<-func(op_v)
               if(j==length(op_v) & k==5){
-                lines(x,yres)
+                lines(x,yres, col='red')
               }
               break
             }
@@ -127,3 +132,26 @@ fit_2D<-function(func, dat, it, op_v){
   #####################################code_end#########################
   return(op_v)
 }
+##########Function end##################################################
+
+
+
+#########start testing##################################################
+
+###########generate random dataset######################################
+rm(list = ls())
+x<-seq(-20,20, by=0.1)
+y<-x^2+x+1+10*runif(length(x))
+plot(x,y)
+dat<-matrix( c(y,x), nrow = 2, ncol = length(x), byrow = 'TRUE')
+#v<-vector(mode='numeric',length = 3)
+func<-function(v){
+  y<-v[1]*x*x+v[2]*x+v[3]
+  return(y)
+}
+i<-20000
+lines(x, f(c(1,1,3)), col='red')
+op_v<-c(1,2,3)
+fit_2D(func, dat, i, op_v)
+class(func)
+fit_2D(func(v), dat, i, v)
