@@ -1,4 +1,8 @@
 rm(list=ls())
+install.packages('devtools')
+library(devtools)
+install_github('Chitran1987/DataAnalyze1.0')
+library(DataAnalyze1.0)
 ############Function Start#################################################
 fit_2D<-function(func, dat, it, op_v){
   
@@ -6,13 +10,13 @@ fit_2D<-function(func, dat, it, op_v){
   
   
   #The sum of error squared##############################
-  MSE_f<-function(func){
+ # MSE_f<-function(func){
     #try(if(class(func)!='function'){stop('argument to MSE_f(f) has to be a function')}
       #  else{
-          m<-(sum((func(op_v)-dat[1,])^2))
-          return(m)  
+  #        m<-(sum((func(op_v)-dat[1,])^2))
+   #       return(m)  
        # })
-  }
+  #}
   ######################################################
   
   #Define the proportionality function##################
@@ -31,7 +35,7 @@ fit_2D<-function(func, dat, it, op_v){
   d<-'TRUE'     #bit set to false whenever solution does not converge within the given number of iterations
   
   
-  for(k in 1:1000){
+  for(k in 1:100){
     if(d=='FALSE'){
       print('solution did not converge')
       break
@@ -39,7 +43,7 @@ fit_2D<-function(func, dat, it, op_v){
     q<-vector(mode='numeric', length=4)
     t<-0.002
     va<-0
-    q[1]<-MSE_f(func(op_v))
+    q[1]<-MSE_f(func, op_v, dat)
     #l<-1
     #it<-20000
     ####The optimization loop#######################################################
@@ -56,9 +60,9 @@ fit_2D<-function(func, dat, it, op_v){
         }
         if(i==1) {
           op_v[j]<-op_v[j]+t
-          q[2]<-MSE_f(func(op_v))
+          q[2]<-MSE_f(func,op_v, dat)
           op_v[j]<-op_v[j]-2*t
-          q[3]<-MSE_f(func(op_v))
+          q[3]<-MSE_f(func, op_v, dat)
           op_v[j]<-op_v[j]+2*t
           if(q[1]>q[2] & q[1]>q[3]){
             if(abs(q[1]-q[3])>abs(q[1]-q[2])){
@@ -90,9 +94,9 @@ fit_2D<-function(func, dat, it, op_v){
             break
           }
           else if(va==1){
-            q[2]<-MSE_f(func(op_v))
+            q[2]<-MSE_f(func, op_v, dat)
             op_v[j]<-op_v[j]+l(k)*t
-            q[3]<-MSE_f(func(op_v))
+            q[3]<-MSE_f(func, op_v, dat)
             if(q[3]>q[2]){
               va<-0
               print('Local minima reached')
@@ -107,16 +111,16 @@ fit_2D<-function(func, dat, it, op_v){
             }
           }
           else{
-            q[2]<-MSE_f(func(op_v))
+            q[2]<-MSE_f(func, op_v, dat)
             op_v[j]<-op_v[j]-l(k)*t
-            q[3]<-MSE_f(func(op_v))
+            q[3]<-MSE_f(func, op_v, dat)
             if(q[3]>q[2]){
               va<-0
               print('Local minima reached')
               yres<-func(op_v)
-              if(j==length(op_v) & k==5){
-                lines(x,yres, col='red')
-              }
+              #if(j==length(op_v) & k==100){
+               # lines(x,yres, col='red')
+              #}
               break
             }
             else{
@@ -130,8 +134,14 @@ fit_2D<-function(func, dat, it, op_v){
   }
 
   #####################################code_end#########################
+  if(d==TRUE){
   return(op_v)
-}
+    lines(x,yres, col='red')
+  }
+  else{
+    return(NULL)
+  }
+  }
 ##########Function end##################################################
 
 
@@ -151,7 +161,7 @@ func<-function(v){
 }
 i<-200000
 lines(x, func(c(3.484,0.612,1.502,1.852,1.786,0.976,1.386,-0.600,1.750)), col='red')
-op_v<-c(3.018,0.480,1.426, 2.316,1.744,1.034,1.522,-0.464,1.844)
+op_v<-c(1000,0.480,1.426, 2.316,1.744,1.034,1.522,-0.223,1.844)
 fit_2D(func, dat, i, op_v)
 class(func)
 fit_2D(func(v), dat, i, v)
@@ -159,3 +169,4 @@ clp<-function(){
   dev.off()
   return(NULL)
 }
+lines(x, func(op_v), col='red')
