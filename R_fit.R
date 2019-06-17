@@ -31,7 +31,7 @@ fit_2D<-function(func, dat, it, op_v){
   d<-'TRUE'     #bit set to false whenever solution does not converge within the given number of iterations
   
   
-  for(k in 1:10){
+  for(k in 1:100){
     if(d=='FALSE'){
       print('solution did not converge')
       break
