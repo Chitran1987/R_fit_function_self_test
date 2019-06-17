@@ -31,13 +31,13 @@ fit_2D<-function(func, dat, it, op_v){
   d<-'TRUE'     #bit set to false whenever solution does not converge within the given number of iterations
   
   
-  for(k in 1:100){
+  for(k in 1:1000){
     if(d=='FALSE'){
       print('solution did not converge')
       break
     }
     q<-vector(mode='numeric', length=4)
-    t<-0.02
+    t<-0.002
     va<-0
     q[1]<-MSE_f(func(op_v))
     #l<-1
@@ -149,9 +149,9 @@ func<-function(v){
   y<-v[1]*exp(-1*(((x-v[2])/(v[3]))^2))+v[4]*exp(-1*(((x-v[5])/(v[6]))^2))+v[7]*exp(-1*(((x-v[8])/(v[9]))^2))
   return(y)
 }
-i<-20000
-lines(x, func(c(4,1,1,2,2,0.66,2,-0.5,2)), col='red')
-op_v<-fit_2D(func, dat, i, op_v)
+i<-200000
+lines(x, func(c(3.484,0.612,1.502,1.852,1.786,0.976,1.386,-0.600,1.750)), col='red')
+op_v<-c(3.018,0.480,1.426, 2.316,1.744,1.034,1.522,-0.464,1.844)
 fit_2D(func, dat, i, op_v)
 class(func)
 fit_2D(func(v), dat, i, v)
